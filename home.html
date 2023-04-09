@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- use cdn link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Quicksand",sans-serif;
+        }
+        body{
+            background-color: rgb(49, 42, 42);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            height: 100vh;
+            width: 100vw;
+        }
+        .box{
+            width: 20vw;
+            height: 50vh;
+            font-size: 60.5%;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.2rem 3rem rgb(202, 197, 197);
+            background: rgb(182, 200, 236);
+            position: relative;
+            overflow: hidden;
+            transform: translate3d(0,0,0);
+            min-width: 20rem;
+            min-height: 35rem;
+        }
+        .wave1{
+            opacity: 0.3;
+            position: absolute;
+            top: 115%;
+            left: 50%;
+            background: white;
+            width: 50rem;
+            height: 50rem;
+            margin-left: -25rem;
+            margin-top: -25rem;
+            /* transform-origin: 50% 48%; */
+           border-radius: 43%;
+           animation-name: drift;
+           animation-duration: 3000ms;
+           animation-iteration-count: infinite; 
+           animation-timing-function: ease-in-out;
+           box-shadow: 6px;
+        }
+        .wave2{
+            opacity: 0.2;
+            animation-name: drift;
+           animation-duration: 5000ms;
+           animation-iteration-count: infinite; 
+           animation-direction: alternate;
+           animation-timing-function: ease-in-out; 
+           box-shadow: 2px;
+        }
+        .wave3{
+            opacity: 0.1;
+            animation-name: drift;
+           animation-duration: 7000ms;
+           animation-iteration-count: infinite;
+           animation-timing-function: ease-in-out; 
+        }
+        @keyframes drift{
+            from{
+                transform: rotate(0deg);
+            }
+            to{
+                transform: rotate(360deg);
+            }
+        }
+        .info{
+            width: 100%;
+            height: 45%;
+            bottom: 0;
+            z-index: 4;
+            position: absolute;
+            /* left: 23%; */
+            /* font-size: 15px; */
+        }
+        .location{
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.2rem;
+
+        }
+        .fa-street-view{
+            animation: rotates 3s linear infinite alternate;
+        }
+        @keyframes rotates {
+            from{
+                transform: translateX(-0.5rem);
+            }
+            to{
+                transform: translateX(0.5rem);
+            }
+        }
+        #date{
+            text-align: center;
+            margin-top: 0.5rem;
+            color: gray;
+            font-size: 1rem;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+        .temp{
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 2.8rem;
+        }
+        .tempmin_max{
+            text-align: center;
+            margin-top: 0.3rem;
+            font-weight: 300;
+            font-size: 1.2rem;
+            color: gray;
+        }
+        #weathercon{
+            height: 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+        }
+        .fa-sun{
+            animation: sun 3s linear infinite alternate;
+        }
+        @keyframes sun {
+            from{
+                transform: scale(0.8);
+            }
+            to{
+                transform: scale(1.2);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="wave1"></div>
+        <div class="wave2"></div>
+        <div class="wave3"></div>
+
+    <div id="weathercon"><i class="fa-solid fa-sun" style="color: #eccc68 "></i></div>
+
+    <div class="info">
+        <h2 class="location"><i class="fa-solid fa-street-view"  style="color: white"></i>{%location%},{%country%}</h2>
+        <p id="date">WED | OCT 23 | 10:49AM</p>
+        <h1 class="temp">{%tempval%}&deg;C</h1>
+        <h3 class="tempmin_max">MIN {%tempmin%}&deg;C | MAX {%tempmax%}&deg;C</h3>
+    </div>
+</div>
+<script>
+    const curdate=document.getElementById("date");
+    let weathercon=document.getElementById("weathercon")
+    const tempstatus="{%tempstatus%}"
+    if(tempstatus=="Clear")
+    {
+        weathercon.innerHTML='<i class="fa-solid fa-sun" style="color: rgb(240, 188, 46)"></i>' 
+    }
+    else if(tempstatus=="Clouds")
+    {
+        weathercon.innerHTML='<i class="fa-solid fa-cloud" style="color: white"></i>' 
+    }
+    else if(tempstatus=="Rainy")
+    {
+        weathercon.innerHTML='<i class="fa-solid fa-rain" style="color: grey"></i>' 
+    }
+    else
+    {
+        weathercon.innerHTML='<i class="fa-solid fa-humid" style="color: white"></i>' 
+    }
+    const getcurrentday=()=>{
+        let currentdate=new Date();
+        var arr=new Array(7);
+        arr[0]="Sunday";
+        arr[1]="Monday";
+        arr[2]="Tuesday";
+        arr[3]="Wednesday";
+        arr[4]="Thursday";
+        arr[5]="Friday";
+        arr[6]="Saturday";
+        let day=arr[currentdate.getDay()];
+        return day;
+
+    }
+    getcurrentday();
+    const getcurrenttime=()=>{
+        let currenttime=new Date();
+        let hours=currenttime.getHours();
+        let mins=currenttime.getMinutes();
+        let date=currenttime.getDate();
+        let period="AM"//by default
+        if(hours>11)
+        {
+            period="PM";
+            if(hours>12)
+            {
+                hours-=12;
+            }
+        }
+        if(mins<10)
+        {
+            mins="0"+mins
+        }
+        var months=["Jan","Feb","March","April","May","June","July","Aug","Sep","Oct","Nov","Dec"]
+        let month=months[currenttime.getMonth()];
+        // console.log(date)
+        // console.log(hours)
+        // console.log(mins)
+        return `${month} ${date} | ${hours}:${mins}${period}`
+    }
+    curdate.innerHTML=getcurrentday()+"|"+getcurrenttime();
+</script>
+</body>
+</html>
